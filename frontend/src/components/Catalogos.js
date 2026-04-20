@@ -14,7 +14,32 @@ export default function Catalogos() {
     nombre: ""
   });
 
-  const cargarCatalogos = async () => {
+  useEffect(() => {
+    const cargarCatalogos = async () => {
+      try {
+        const [resMarcas, resModelos, resProveedores] = await Promise.all([
+          fetch(`${process.env.REACT_APP_API_URL}/catalogos/marcas`),
+          fetch(`${process.env.REACT_APP_API_URL}/catalogos/modelos`),
+          fetch(`${process.env.REACT_APP_API_URL}/catalogos/proveedores`)
+        ]);
+
+        const dataMarcas = await resMarcas.json();
+        const dataModelos = await resModelos.json();
+        const dataProveedores = await resProveedores.json();
+
+        setMarcas(Array.isArray(dataMarcas) ? dataMarcas : []);
+        setModelos(Array.isArray(dataModelos) ? dataModelos : []);
+        setProveedores(Array.isArray(dataProveedores) ? dataProveedores : []);
+      } catch (error) {
+        console.error(error);
+        showToast("Error al cargar catálogos", "error");
+      }
+    };
+
+    cargarCatalogos();
+  }, [showToast]);
+
+  const recargarCatalogos = async () => {
     try {
       const [resMarcas, resModelos, resProveedores] = await Promise.all([
         fetch(`${process.env.REACT_APP_API_URL}/catalogos/marcas`),
@@ -34,10 +59,6 @@ export default function Catalogos() {
       showToast("Error al cargar catálogos", "error");
     }
   };
-
-  useEffect(() => {
-    cargarCatalogos();
-  }, []);
 
   const agregarMarca = async () => {
     if (!nuevaMarca.trim()) {
@@ -62,7 +83,7 @@ export default function Catalogos() {
       }
 
       setNuevaMarca("");
-      await cargarCatalogos();
+      await recargarCatalogos();
       showToast("Marca agregada correctamente", "success");
     } catch (error) {
       console.error(error);
@@ -92,7 +113,7 @@ export default function Catalogos() {
       }
 
       setNuevoProveedor("");
-      await cargarCatalogos();
+      await recargarCatalogos();
       showToast("Proveedor registrado correctamente", "success");
     } catch (error) {
       console.error(error);
@@ -134,7 +155,7 @@ export default function Catalogos() {
         nombre: ""
       });
 
-      await cargarCatalogos();
+      await recargarCatalogos();
       showToast("Modelo registrado correctamente", "success");
     } catch (error) {
       console.error(error);

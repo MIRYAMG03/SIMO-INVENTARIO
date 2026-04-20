@@ -40,7 +40,6 @@ export default function Movimientos() {
   const generarPDF = (movidos, fecha, destino) => {
     const doc = new jsPDF();
 
-    // LOGO CENTRADO
     const pageWidth = doc.internal.pageSize.getWidth();
     const imgWidth = 35;
     const imgHeight = 35;
@@ -48,7 +47,6 @@ export default function Movimientos() {
 
     doc.addImage(logo, "PNG", x, 10, imgWidth, imgHeight);
 
-    // TITULO
     doc.setFontSize(16);
     doc.text("SIMO - Movimiento de Equipos", pageWidth / 2, 55, {
       align: "center"
@@ -101,14 +99,19 @@ export default function Movimientos() {
       return;
     }
 
+    const payload = {
+      destino,
+      imeis: listaIMEIS
+    };
+
     try {
       const res = await fetch(`${process.env.REACT_APP_API_URL}/movimientos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(res)
-      })
+        body: JSON.stringify(payload)
+      });
 
       const data = await res.json();
 
@@ -131,7 +134,6 @@ export default function Movimientos() {
       setDestino("");
       setListaIMEIS([]);
       setImeiInput("");
-
     } catch (error) {
       console.error(error);
       showToast("Error al enviar equipos", "error");
@@ -176,6 +178,7 @@ export default function Movimientos() {
               <span>{imei}</span>
               <button
                 className="button-danger"
+                type="button"
                 onClick={() => eliminarIMEI(index)}
               >
                 Eliminar
@@ -187,7 +190,7 @@ export default function Movimientos() {
 
       <br />
 
-      <button className="button-primary" onClick={enviarEquipos}>
+      <button className="button-primary" type="button" onClick={enviarEquipos}>
         Enviar equipos
       </button>
     </div>
