@@ -117,7 +117,7 @@ export default function Movimientos() {
     };
 
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/movimientos`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/movimientos/salida`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
