@@ -66,26 +66,50 @@ export default function Movimientos() {
     const doc = new jsPDF();
 
     const pageWidth = doc.internal.pageSize.getWidth();
-    const imgWidth = 35;
-    const imgHeight = 35;
-    const x = (pageWidth - imgWidth) / 2;
 
-    doc.addImage(logo, "PNG", x, 10, imgWidth, imgHeight);
+    // Fondo superior
+    doc.setFillColor(15, 23, 42);
+    doc.rect(0, 0, pageWidth, 32, "F");
 
-    doc.setFontSize(16);
-    doc.text("SIMO - Movimiento de Equipos", pageWidth / 2, 55, {
-      align: "center"
-    });
+    // Logo
+    const imgWidth = 28;
+    const imgHeight = 28;
+    const xLogo = 14;
+    doc.addImage(logo, "PNG", xLogo, 2, imgWidth, imgHeight);
+
+    // Título principal
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.text("SIMO", 48, 14);
 
     doc.setFontSize(11);
-    doc.text(`Destino: ${destino}`, 14, 65);
-    doc.text(`Fecha: ${new Date(fecha).toLocaleString()}`, 14, 72);
+    doc.setFont("helvetica", "normal");
+    doc.text("Salida de equipos a sucursal", 48, 22);
 
+    // Regresar color normal
+    doc.setTextColor(0, 0, 0);
+
+    // Caja de información
+    doc.setDrawColor(220, 220, 220);
+    doc.setFillColor(248, 250, 252);
+    doc.roundedRect(14, 40, pageWidth - 28, 26, 3, 3, "FD");
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    doc.text("Sucursal destino:", 20, 50);
+    doc.text("Fecha:", 20, 58);
+
+    doc.setFont("helvetica", "normal");
+    doc.text(String(destino || "-"), 60, 50);
+    doc.text(new Date(fecha).toLocaleString(), 60, 58);
+
+    // Tabla
     autoTable(doc, {
-      startY: 80,
+      startY: 75,
       head: [["Equipo", "RAM", "ROM", "Color", "IMEI", "Pedido", "Precio"]],
       body: movidos.map((item) => [
-        item.equipo || "-",
+        item.equipo || item.modelo || "-",
         item.ram || "-",
         item.rom || "-",
         item.color || "-",
@@ -93,9 +117,49 @@ export default function Movimientos() {
         item.numero_pedido || "-",
         `$${Number(item.precio || 0).toFixed(2)}`
       ]),
-      styles: { fontSize: 9 },
-      headStyles: { fillColor: [37, 99, 235] }
+      styles: {
+        fontSize: 9,
+        cellPadding: 3,
+        valign: "middle"
+      },
+      headStyles: {
+        fillColor: [37, 99, 235],
+        textColor: 255,
+        fontStyle: "bold"
+      },
+      alternateRowStyles: {
+        fillColor: [248, 250, 252]
+      },
+      margin: { left: 14, right: 14 }
     });
+
+    // Totales
+    const finalY = doc.lastAutoTable.finalY + 12;
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    doc.text(`Total de equipos: ${movidos.length}`, 14, finalY);
+
+    // Área de firmas
+    const firmaY = finalY + 28;
+
+    doc.setDrawColor(120, 120, 120);
+    doc.line(20, firmaY, 85, firmaY);
+    doc.line(120, firmaY, 185, firmaY);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.text("Entrega", 46, firmaY + 6);
+    doc.text("Recibe", 148, firmaY + 6);
+
+    // Pie
+    doc.setFontSize(9);
+    doc.setTextColor(100, 100, 100);
+    doc.text(
+      "Documento generado automáticamente por SIMO.",
+      14,
+      firmaY + 20
+    );
 
     doc.save(`movimiento_${Date.now()}.pdf`);
   };
