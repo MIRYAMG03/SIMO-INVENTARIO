@@ -11,6 +11,31 @@ export default function Movimientos() {
 
   const { showToast } = useToast();
 
+  const sucursales = [
+    "SIERRA MOVIL PINAL 1",
+    "SIERRA MOVIL PINAL 2",
+    "SIERRA MOVIL AHUACATLAN 1",
+    "SIERRA MOVIL AHUACATLAN 2",
+    "SIERRA MOVIL PLAZOLETA",
+    "SIERRA MOVIL JALPAN",
+    "SIERRA MOVIL MERCADO",
+    "SIERRA MOVIL PUERTO",
+    "SIERRA MOVIL PURISIMA",
+    "SIERRA MOVIL CONCA",
+    "SIERRA MOVIL ARROYO SECO",
+    "SIERRA MOVIL LAGUNITA 1",
+    "SIERRA MOVIL LAGUNITA 2",
+    "SIERRA MOVIL XILITLA 1",
+    "SIERRA MOVIL XILITLA 2",
+    "SIERRA MOVIL MATLAPA 1",
+    "SIERRA MOVIL MATLAPA 2",
+    "SIERRA MOVIL HUICHI 1",
+    "SIERRA MOVIL HUICHI 2",
+    "SIERRA MOVIL MIMI",
+    "SIERRA MOVIL TAMPAMOLON",
+    "SIERRA MOVIL SANTOS"
+  ];
+
   const handleScan = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -68,21 +93,8 @@ export default function Movimientos() {
         item.numero_pedido || "-",
         `$${Number(item.precio || 0).toFixed(2)}`
       ]),
-      styles: {
-        fontSize: 9
-      },
-      headStyles: {
-        fillColor: [37, 99, 235]
-      },
-      columnStyles: {
-        0: { cellWidth: 40 },
-        1: { cellWidth: 15 },
-        2: { cellWidth: 18 },
-        3: { cellWidth: 20 },
-        4: { cellWidth: 35 },
-        5: { cellWidth: 20 },
-        6: { cellWidth: 20, halign: "right" }
-      }
+      styles: { fontSize: 9 },
+      headStyles: { fillColor: [37, 99, 235] }
     });
 
     doc.save(`movimiento_${Date.now()}.pdf`);
@@ -134,6 +146,7 @@ export default function Movimientos() {
       setDestino("");
       setListaIMEIS([]);
       setImeiInput("");
+
     } catch (error) {
       console.error(error);
       showToast("Error al enviar equipos", "error");
@@ -153,8 +166,11 @@ export default function Movimientos() {
           onChange={(e) => setDestino(e.target.value)}
         >
           <option value="">Selecciona sucursal</option>
-          <option value="SIERRA MOVIL PINAL 1">SIERRA MOVIL PINAL 1</option>
-          <option value="SIERRA MOVIL JALPAN">SIERRA MOVIL JALPAN</option>
+          {sucursales.map((sucursal) => (
+            <option key={sucursal} value={sucursal}>
+              {sucursal}
+            </option>
+          ))}
         </select>
       </div>
 
@@ -178,7 +194,6 @@ export default function Movimientos() {
               <span>{imei}</span>
               <button
                 className="button-danger"
-                type="button"
                 onClick={() => eliminarIMEI(index)}
               >
                 Eliminar
@@ -190,7 +205,7 @@ export default function Movimientos() {
 
       <br />
 
-      <button className="button-primary" type="button" onClick={enviarEquipos}>
+      <button className="button-primary" onClick={enviarEquipos}>
         Enviar equipos
       </button>
     </div>
