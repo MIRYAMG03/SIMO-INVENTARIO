@@ -35,13 +35,20 @@ export default function Login({ onLogin }) {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-        usuario: form.usuario,
-        password: form.password
-      })
-      })
-      
+          usuario: form.usuario,
+          password: form.password
+        })
+      });
 
-      const data = await res.json();
+      const text = await res.text();
+      console.log("RESPUESTA LOGIN:", text);
+
+      let data = {};
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch {
+        data = {};
+      }
 
       if (!res.ok) {
         setCargando(false);
