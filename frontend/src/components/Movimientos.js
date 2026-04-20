@@ -81,7 +81,7 @@ export default function Movimientos() {
     doc.setTextColor(255, 255, 255);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(18);
-    doc.text("SIMO", 48, 14);
+    doc.text("SIERRA MOVIL", 48, 14);
 
     doc.setFontSize(11);
     doc.setFont("helvetica", "normal");
