@@ -29,7 +29,7 @@ export default function Login({ onLogin }) {
     try {
       setCargando(true);
 
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
