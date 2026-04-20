@@ -12,7 +12,7 @@ export default function ReporteComisiones() {
 
   const cargarReporte = useCallback(async (inicio = "", fin = "") => {
     try {
-      let url = fetch(`${process.env.REACT_APP_API_URL}/comisiones`);
+      let url = `${process.env.REACT_APP_API_URL}/comisiones`;
 
       const params = new URLSearchParams();
       if (inicio) params.append("fechaInicio", inicio);
@@ -31,7 +31,7 @@ export default function ReporteComisiones() {
       } catch {
         console.error("Respuesta no válida:", text);
         showToast("El servidor devolvió una respuesta no válida", "error");
-        return;
+        return; 
       }
 
       if (!res.ok) {
