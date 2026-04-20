@@ -9,28 +9,28 @@ export default function InventarioSucursal() {
   const [sucursalSeleccionada, setSucursalSeleccionada] = useState("");
   const { showToast } = useToast();
 
-  const cargarInventario = async () => {
-    try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/inventario/sucursal`);
-      const data = await res.json();
-
-      if (Array.isArray(data)) {
-        setEquipos(data);
-      } else {
-        console.error("Respuesta no válida:", data);
-        setEquipos([]);
-        showToast(data.error || "Error al cargar inventario por sucursal", "error");
-      }
-    } catch (error) {
-      console.error("Error al cargar inventario por sucursal:", error);
-      setEquipos([]);
-      showToast("Error al cargar inventario por sucursal", "error");
-    }
-  };
-
   useEffect(() => {
+    const cargarInventario = async () => {
+      try {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/inventario/sucursal`);
+        const data = await res.json();
+
+        if (Array.isArray(data)) {
+          setEquipos(data);
+        } else {
+          console.error("Respuesta no válida:", data);
+          setEquipos([]);
+          showToast(data.error || "Error al cargar inventario por sucursal", "error");
+        }
+      } catch (error) {
+        console.error("Error al cargar inventario por sucursal:", error);
+        setEquipos([]);
+        showToast("Error al cargar inventario por sucursal", "error");
+      }
+    };
+
     cargarInventario();
-  }, []);
+  }, [showToast]);
 
   const obtenerClaseEstatus = (estatus) => {
     if (!estatus) return "status-gray";
@@ -199,8 +199,6 @@ export default function InventarioSucursal() {
         </button>
       </div>
 
-      
-
       <div style={{ overflowX: "auto" }}>
         <table className="tabla-inventario">
           <thead>
@@ -246,7 +244,10 @@ export default function InventarioSucursal() {
             )}
           </tbody>
         </table>
-      </div> <br></br>
+      </div>
+
+      <br />
+
       <div className="panel-soft" style={{ marginBottom: "20px" }}>
         <h3>Conteo por sucursal</h3>
         <div className="list-box">

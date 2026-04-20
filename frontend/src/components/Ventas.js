@@ -13,10 +13,10 @@ export default function Ventas() {
   const { showToast } = useToast();
 
   useEffect(() => {
-    fetch("http://localhost:3001/empleados")
-      .then(res => res.json())
-      .then(data => setEmpleados(data))
-      .catch(err => console.error(err));
+    fetch(`${process.env.REACT_APP_API_URL}/empleados`)
+      .then((res) => res.json())
+      .then((data) => setEmpleados(Array.isArray(data) ? data : []))
+      .catch((err) => console.error(err));
   }, []);
 
   const handleChange = (e) => {
@@ -39,10 +39,22 @@ export default function Ventas() {
       return;
     }
 
+    if (!form.precio_venta) {
+      showToast("Ingresa el precio de venta", "warning");
+      return;
+    }
+
     if (!form.comision_venta) {
       showToast("Ingresa la comisión", "warning");
       return;
     }
+
+    const payload = {
+      imei,
+      empleado: form.empleado,
+      precio_venta: form.precio_venta,
+      comision_venta: form.comision_venta
+    };
 
     try {
       const res = await fetch(`${process.env.REACT_APP_API_URL}/ventas`, {
@@ -50,8 +62,8 @@ export default function Ventas() {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(res)
-      })
+        body: JSON.stringify(payload)
+      });
 
       const data = await res.json();
 
@@ -68,7 +80,6 @@ export default function Ventas() {
         precio_venta: "",
         comision_venta: ""
       });
-
     } catch (error) {
       console.error(error);
       showToast("Error en venta", "error");
@@ -100,7 +111,7 @@ export default function Ventas() {
           onChange={handleChange}
         >
           <option value="">Selecciona empleado</option>
-          {empleados.map(emp => (
+          {empleados.map((emp) => (
             <option key={emp.id} value={emp.nombre}>
               {emp.nombre}
             </option>
@@ -130,7 +141,7 @@ export default function Ventas() {
         />
       </div>
 
-      <button className="button-primary" onClick={registrarVenta}>
+      <button className="button-primary" type="button" onClick={registrarVenta}>
         Registrar venta
       </button>
     </div>

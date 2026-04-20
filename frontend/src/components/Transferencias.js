@@ -81,14 +81,20 @@ export default function Transferencias() {
       return;
     }
 
+    const payload = {
+      origen,
+      destino,
+      imeis: listaIMEIS
+    };
+
     try {
       const res = await fetch(`${process.env.REACT_APP_API_URL}/transferencias`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(res)
-      })
+        body: JSON.stringify(payload)
+      });
 
       const text = await res.text();
       console.log("RESPUESTA TRANSFERENCIAS:", text);

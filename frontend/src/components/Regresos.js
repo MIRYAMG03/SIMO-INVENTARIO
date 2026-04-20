@@ -69,14 +69,19 @@ export default function Regresos() {
       return;
     }
 
+    const payload = {
+      origen,
+      imeis: listaIMEIS
+    };
+
     try {
       const res = await fetch(`${process.env.REACT_APP_API_URL}/regresos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(res)
-      })
+        body: JSON.stringify(payload)
+      });
 
       const text = await res.text();
       console.log("RESPUESTA REGRESOS:", text);
