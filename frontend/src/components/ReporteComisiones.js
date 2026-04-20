@@ -12,7 +12,7 @@ export default function ReporteComisiones() {
 
   const cargarReporte = useCallback(async (inicio = "", fin = "") => {
     try {
-      let url = "http://localhost:3001/comisiones";
+      let url = fetch(`${process.env.REACT_APP_API_URL}/comisiones`);
 
       const params = new URLSearchParams();
       if (inicio) params.append("fechaInicio", inicio);

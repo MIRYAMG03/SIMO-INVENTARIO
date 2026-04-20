@@ -39,7 +39,7 @@ export default function CambiarPassword() {
     }
 
     try {
-      const res = await fetch("http://localhost:3001/auth/cambiar-password", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/auth/cambiar-password`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

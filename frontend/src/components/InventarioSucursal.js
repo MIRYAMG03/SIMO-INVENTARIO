@@ -11,7 +11,7 @@ export default function InventarioSucursal() {
 
   const cargarInventario = async () => {
     try {
-      const res = await fetch("http://localhost:3001/inventario/sucursal");
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/inventario/sucursal`);
       const data = await res.json();
 
       if (Array.isArray(data)) {

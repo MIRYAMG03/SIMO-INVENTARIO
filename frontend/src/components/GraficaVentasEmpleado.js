@@ -6,9 +6,9 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer
+  ResponsiveContainer,
+  Cell
 } from "recharts";
-import { Cell } from "recharts";
 
 const colores = [
   "#2563eb", // azul
@@ -19,14 +19,13 @@ const colores = [
   "#0ea5e9", // celeste
 ];
 
-
 export default function GraficaVentasEmpleado() {
   const [datos, setDatos] = useState([]);
 
   useEffect(() => {
     const cargarGrafica = async () => {
       try {
-        const res = await fetch("http://localhost:3001/graficas/ventas-empleado");
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/graficas/ventas-empleado`);
         const data = await res.json();
 
         if (Array.isArray(data)) {
@@ -60,11 +59,14 @@ export default function GraficaVentasEmpleado() {
             <XAxis dataKey="empleado" />
             <YAxis />
             <Tooltip />
-            
+
             <Bar dataKey="total_vendido" name="Total vendido">
-                {datos.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={colores[index % colores.length]} />
-                ))}
+              {datos.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={colores[index % colores.length]}
+                />
+              ))}
             </Bar>
           </BarChart>
         </ResponsiveContainer>

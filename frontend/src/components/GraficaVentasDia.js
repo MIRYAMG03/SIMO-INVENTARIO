@@ -15,7 +15,7 @@ export default function GraficaVentasDia() {
   useEffect(() => {
     const cargar = async () => {
       try {
-        const res = await fetch("http://localhost:3001/graficas/ventas-dia");
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/graficas/ventas-dia`);
         const data = await res.json();
 
         if (Array.isArray(data)) {
@@ -48,7 +48,12 @@ export default function GraficaVentasDia() {
             <XAxis dataKey="fecha" />
             <YAxis />
             <Tooltip />
-            <Line type="monotone" dataKey="total" stroke="#2563eb" strokeWidth={3}/>
+            <Line
+              type="monotone"
+              dataKey="total"
+              stroke="#2563eb"
+              strokeWidth={3}
+            />
           </LineChart>
         </ResponsiveContainer>
       </div>

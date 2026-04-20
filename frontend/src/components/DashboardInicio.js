@@ -15,7 +15,7 @@ export default function DashboardInicio() {
   useEffect(() => {
     const cargar = async () => {
       try {
-        const res = await fetch("http://localhost:3001/dashboard");
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/dashboard`);
         const data = await res.json();
 
         if (!res.ok) {

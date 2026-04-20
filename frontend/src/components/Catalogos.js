@@ -17,9 +17,9 @@ export default function Catalogos() {
   const cargarCatalogos = async () => {
     try {
       const [resMarcas, resModelos, resProveedores] = await Promise.all([
-        fetch("http://localhost:3001/catalogos/marcas"),
-        fetch("http://localhost:3001/catalogos/modelos"),
-        fetch("http://localhost:3001/catalogos/proveedores")
+        fetch(`${process.env.REACT_APP_API_URL}/catalogos/marcas`),
+        fetch(`${process.env.REACT_APP_API_URL}/catalogos/modelos`),
+        fetch(`${process.env.REACT_APP_API_URL}/catalogos/proveedores`)
       ]);
 
       const dataMarcas = await resMarcas.json();
@@ -46,7 +46,7 @@ export default function Catalogos() {
     }
 
     try {
-      const res = await fetch("http://localhost:3001/catalogos/marcas", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/catalogos/marcas`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -62,7 +62,7 @@ export default function Catalogos() {
       }
 
       setNuevaMarca("");
-      cargarCatalogos();
+      await cargarCatalogos();
       showToast("Marca agregada correctamente", "success");
     } catch (error) {
       console.error(error);
@@ -77,7 +77,7 @@ export default function Catalogos() {
     }
 
     try {
-      const res = await fetch("http://localhost:3001/catalogos/proveedores", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/catalogos/proveedores`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -88,16 +88,15 @@ export default function Catalogos() {
       const data = await res.json();
 
       if (!res.ok) {
-        showToast(data.error || "Error al agregar proveedor", "error");
-        return;
+        throw new Error(data.error || "Error al registrar proveedor");
       }
 
       setNuevoProveedor("");
-      cargarCatalogos();
-      showToast("Proveedor agregado correctamente", "success");
+      await cargarCatalogos();
+      showToast("Proveedor registrado correctamente", "success");
     } catch (error) {
       console.error(error);
-      showToast("Error al agregar proveedor", "error");
+      showToast(error.message || "Error al registrar proveedor", "error");
     }
   };
 
@@ -113,19 +112,21 @@ export default function Catalogos() {
     }
 
     try {
-      const res = await fetch("http://localhost:3001/catalogos/modelos", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/catalogos/modelos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(nuevoModelo)
+        body: JSON.stringify({
+          marca_id: nuevoModelo.marca_id,
+          nombre: nuevoModelo.nombre
+        })
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        showToast(data.error || "Error al agregar modelo", "error");
-        return;
+        throw new Error(data.error || "Error al registrar modelo");
       }
 
       setNuevoModelo({
@@ -133,11 +134,11 @@ export default function Catalogos() {
         nombre: ""
       });
 
-      cargarCatalogos();
-      showToast("Modelo agregado correctamente", "success");
+      await cargarCatalogos();
+      showToast("Modelo registrado correctamente", "success");
     } catch (error) {
       console.error(error);
-      showToast("Error al agregar modelo", "error")
+      showToast(error.message || "Error al registrar modelo", "error");
     }
   };
 

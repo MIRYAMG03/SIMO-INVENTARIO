@@ -22,7 +22,7 @@ export default function RegistrarEquipos() {
   const [listaIMEIS, setListaIMEIS] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3001/catalogos/marcas")
+    fetch(`${process.env.REACT_APP_API_URL}/catalogos/marcas`)
       .then((res) => res.json())
       .then((data) => setMarcas(data))
       .catch((err) => console.error(err));
@@ -42,7 +42,7 @@ export default function RegistrarEquipos() {
       return;
     }
 
-    fetch(`http://localhost:3001/catalogos/modelos/${marca_id}`)
+    fetch(`${process.env.REACT_APP_API_URL}/catalogos/modelos/${marca_id}`)
       .then((res) => res.json())
       .then((data) => setModelos(data))
       .catch((err) => console.error(err));
@@ -130,7 +130,7 @@ export default function RegistrarEquipos() {
     };
 
     try {
-      const res = await fetch("http://localhost:3001/equipos/lote", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/equipos/lote`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -139,6 +139,11 @@ export default function RegistrarEquipos() {
       });
 
       const result = await res.json();
+
+      if (!res.ok) {
+        showToast(result.error || "Error al registrar equipos", "error");
+        return;
+      }
 
       if (result.errores && result.errores.length > 0) {
         showToast("Algunos IMEIs no se registraron", "warning");

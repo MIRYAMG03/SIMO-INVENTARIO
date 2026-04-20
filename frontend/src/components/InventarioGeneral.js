@@ -8,7 +8,7 @@ export default function InventarioGeneral() {
 
   const cargarInventario = useCallback(async () => {
     try {
-      const res = await fetch("http://localhost:3001/inventario/general");
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/inventario/general`);
       const data = await res.json();
 
       if (Array.isArray(data)) {

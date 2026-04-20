@@ -9,7 +9,7 @@ export default function ReporteValorizado() {
 
   const cargarReporte = useCallback(async () => {
     try {
-      const res = await fetch("http://localhost:3001/reportes/valorizado");
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/reportes/valorizado`);
       const data = await res.json();
 
       if (Array.isArray(data)) {

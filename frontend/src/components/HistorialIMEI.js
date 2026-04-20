@@ -15,7 +15,7 @@ export default function HistorialIMEI() {
     }
 
     try {
-      const res = await fetch(`http://localhost:3001/historial/${imeiLimpio}`);
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/historial/${imei}`);
       const data = await res.json();
 
       if (!res.ok) {

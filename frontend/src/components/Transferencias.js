@@ -82,17 +82,13 @@ export default function Transferencias() {
     }
 
     try {
-      const res = await fetch("http://localhost:3001/transferencias", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/transferencias`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          origen,
-          destino,
-          imeis: listaIMEIS
-        })
-      });
+        body: JSON.stringify(res)
+      })
 
       const text = await res.text();
       console.log("RESPUESTA TRANSFERENCIAS:", text);
