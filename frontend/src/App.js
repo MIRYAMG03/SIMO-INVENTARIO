@@ -177,8 +177,8 @@ function App() {
           <div className="brand">
             <img src={logo} alt="SIMO" className="brand-logo" />
             <div>
-              <h1 className="brand-title">SIMO</h1>
-              <p className="brand-subtitle">Sistema de Inventario</p>
+              <h1 className="brand-title">Sistema de Control de Inventario</h1>
+              <p className="brand-subtitle">Sierra Movil</p>
             </div>
           </div>
 
